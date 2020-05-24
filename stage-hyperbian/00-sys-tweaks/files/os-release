@@ -1,0 +1,9 @@
+PRETTY_NAME="HyperBian GNU/Linux 9 (stretch)"
+NAME="HyperBian GNU/Linux"
+VERSION_ID="9"
+VERSION="9 (stretch)"
+ID=hyperbian
+ID_LIKE=debian
+HOME_URL="http://www.hyperion-project.org/"
+SUPPORT_URL="http://forum.hyperion-project.org"
+BUG_REPORT_URL="http://forum.hyperion-project.org"

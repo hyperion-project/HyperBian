@@ -1,0 +1,39 @@
+name: HyperBian release
+
+on:
+  push:
+    branches:
+      - master
+
+#  repository_dispatch:
+#    types: [hyperion_push]
+
+jobs:
+  rpi-image:
+    name: "Build HyperBian image"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      # install dependencies
+      - name: Install dependencies
+        run: |
+          apt-get update
+          apt-get install -y coreutils quilt parted qemu-user-static debootstrap zerofree zip dosfstools bsdtar libcap2-bin grep rsync xz-utils file git curl bc
+
+      # build image
+      - name: Build HyperBian
+        run: |
+          git clone https://github.com/RPi-Distro/pi-gen.git && cd pi-gen
+          git fetch && git fetch --tags
+          git checkout 2020-02-13-raspbian-buster && cd ..
+
+          touch ./pi-gen/stage3/SKIP ./pi-gen/stage4/SKIP ./pi-gen/stage4/SKIP_IMAGES
+          touch ./pi-gen/stage5/SKIP ./pi-gen/stage5/SKIP_IMAGES
+
+          cp -R stage-hyperbian pi-gen/stage-hyperbian
+          cp config pi-gen/config && cd pi-gen
+          ./build.sh          
+
+# mv ./deploy/image_*_raspbian-lite.zip ./deploy/HyperBian_${{ github.event.release.tag_name }}.zip
