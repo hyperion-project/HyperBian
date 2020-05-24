@@ -30,6 +30,19 @@ jobs:
           touch ./pi-gen/stage5/SKIP ./pi-gen/stage5/SKIP_IMAGES
           cp -R stage-hyperbian pi-gen/stage-hyperbian
           cp config pi-gen/config && cd pi-gen
-          sudo ./build.sh          
-
+          sudo ./build.sh
+          ls -la ./deploy
 # mv ./deploy/image_*_raspbian-lite.zip ./deploy/HyperBian_${{ github.event.release.tag_name }}.zip
+
+#      # create draft release and upload image
+#      - name: Create draft release
+#        uses: softprops/action-gh-release@v1
+#        with:
+#          name: HyperBian ${{ env.VERSION }}
+#          tag_name: ${{ env.TAG }}
+#          files: "artifacts/**"
+#          draft: true
+#          prerelease: ${{ env.preRelease }}
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
