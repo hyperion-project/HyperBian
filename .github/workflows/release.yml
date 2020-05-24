@@ -1,12 +1,8 @@
 name: HyperBian release
 
 on:
-  push:
-    branches:
-      - master
-
-#  repository_dispatch:
-#    types: [hyperion_push]
+  repository_dispatch:
+    types: [hyperion_push]
 
 jobs:
   rpi-image:
