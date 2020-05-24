@@ -30,6 +30,6 @@ jobs:
           touch ./pi-gen/stage5/SKIP ./pi-gen/stage5/SKIP_IMAGES
           cp -R stage-hyperbian pi-gen/stage-hyperbian
           cp config pi-gen/config && cd pi-gen
-          ./build.sh          
+          sudo ./build.sh          
 
 # mv ./deploy/image_*_raspbian-lite.zip ./deploy/HyperBian_${{ github.event.release.tag_name }}.zip
