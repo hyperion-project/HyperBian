@@ -1,5 +1,5 @@
 IMG_NAME='HyperBian'
 STAGE_LIST='stage0 stage1 stage2 stage-hyperbian'
-ENABLE_SSH=1
+#ENABLE_SSH=1
 DEPLOY_ZIP=0
 TARGET_HOSTNAME='HyperBian'
