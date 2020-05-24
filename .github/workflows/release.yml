@@ -31,7 +31,8 @@ jobs:
           cp -R stage-hyperbian pi-gen/stage-hyperbian
           cp config pi-gen/config && cd pi-gen
           sudo ./build.sh
-          mv ./deploy/*.img ./deploy/HyperBian.img
+          sudo mv ./deploy/*.img ./deploy/HyperBian.img
+          sudo chown -fR $(stat -c "%U:%G" .) ./deploy
 
       # create release and upload image
       - name: Create release and upload image
