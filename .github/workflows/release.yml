@@ -31,7 +31,7 @@ jobs:
           cp -R stage-hyperbian pi-gen/stage-hyperbian
           cp config pi-gen/config && cd pi-gen
           sudo ./build.sh
-          sudo mv ./deploy/*.img ./deploy/HyperBian.img
+          sudo mv ./deploy/*.zip ./deploy/HyperBian.zip
           sudo chown -fR $(stat -c "%U:%G" .) ./deploy
 
       # create release and upload image
@@ -40,7 +40,7 @@ jobs:
         with:
           name: HyperBian
           tag_name: HyperBian
-          files: "pi-gen/deploy/HyperBian.img"
+          files: "pi-gen/deploy/HyperBian.zip"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
