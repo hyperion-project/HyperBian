@@ -19,8 +19,8 @@ jobs:
       # install dependencies
       - name: Install dependencies
         run: |
-          apt-get update
-          apt-get install -y coreutils quilt parted qemu-user-static debootstrap zerofree zip dosfstools bsdtar libcap2-bin grep rsync xz-utils file git curl bc
+          sudo apt-get update
+          sudo apt-get install -y coreutils quilt parted qemu-user-static debootstrap zerofree zip dosfstools bsdtar libcap2-bin grep rsync xz-utils file git curl bc
 
       # build image
       - name: Build HyperBian
