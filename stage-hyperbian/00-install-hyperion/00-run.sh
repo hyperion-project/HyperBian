@@ -6,7 +6,7 @@ HYPERION_RELEASES_URL="https://api.github.com/repos/hyperion-project/hyperion.ng
 
 # Get the latest version
 HYPERION_LATEST_VERSION=$(curl -sL "$HYPERION_RELEASES_URL" | grep "tag_name" | head -1 | cut -d '"' -f 4)
-HYPERION_RELEASE=$HYPERION_DOWNLOAD_URL/$HYPERION_LATEST_VERSION/Hyperion-$HYPERION_LATEST_VERSION-Linux-armv7l.tar.gz
+HYPERION_RELEASE=$HYPERION_DOWNLOAD_URL/$HYPERION_LATEST_VERSION/Hyperion-$HYPERION_LATEST_VERSION-Linux-armv6l.tar.gz
 
 # Download latest release
 echo '           Download Hyperion'
