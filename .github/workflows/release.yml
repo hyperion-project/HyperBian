@@ -32,11 +32,10 @@ jobs:
 
       # create release and upload image
       - name: Create release and upload image
-        uses: softprops/action-gh-release@v1
+        uses: svenstaro/upload-release-action@1.0.1
         with:
-          name: HyperBian
-          tag_name: HyperBian
-          files: "pi-gen/deploy/HyperBian.zip"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: pi-gen/deploy/HyperBian.zip
+          asset_name: HyperBian.zip
+          tag: HyperBian
+          overwrite: true
