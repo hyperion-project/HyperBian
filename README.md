@@ -5,7 +5,7 @@
 
 ## About HyperBian
 
-Is a ready to use image for your Raspberry Pi. Based on the original Raspberry Pi Foundation image "Raspbian lite". Hyperion is already pre installed. So simply
+Is a ready to use image for your Raspberry Pi. Based on the original Raspberry Pi Foundation image "Raspberry Pi OS Lite". Hyperion is already pre installed. So simply
 1. [Download](https://github.com/Hyperion-Project/HyperBian/releases)
 2. Burn image on sd 
 3. Power on your Pi
