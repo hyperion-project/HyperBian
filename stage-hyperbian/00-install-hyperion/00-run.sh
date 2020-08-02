@@ -13,7 +13,7 @@ echo '           Download Hyperion'
 curl -sS -L --get $HYPERION_RELEASE | tar --strip-components=1 -C ${ROOTFS_DIR}/usr/share/ share/hyperion -xz
 
 # Copy service file and cleanup
-cp ${ROOTFS_DIR}/usr/share/hyperion/service/hyperion.systemd ${ROOTFS_DIR}/etc/systemd/system/hyperiond@.service
+cp hyperion.service ${ROOTFS_DIR}/etc/systemd/system/hyperion.service
 rm -r ${ROOTFS_DIR}/usr/share/hyperion/service
 rm -r ${ROOTFS_DIR}/usr/share/hyperion/desktop 2>/dev/null
 
@@ -39,5 +39,5 @@ ln -fs /usr/share/hyperion/bin/hyperion-framebuffer /usr/bin/hyperion-framebuffe
 ln -fs /usr/share/hyperion/bin/hyperion-dispmanx /usr/bin/hyperion-dispmanx 2>/dev/null
 ln -fs /usr/share/hyperion/bin/hyperion-qt /usr/bin/hyperion-qt 2>/dev/null
 echo '           Register Hyperion'
-systemctl -q enable hyperiond"@pi".service
+systemctl -q enable hyperion.service
 EOF
