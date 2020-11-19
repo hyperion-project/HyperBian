@@ -30,12 +30,20 @@ jobs:
           sudo mv ./deploy/*.zip ./deploy/HyperBian.zip
           sudo chown -fR $(stat -c "%U:%G" .) ./deploy
 
+      - name: Delete previous HyperBian Release
+        uses: dev-drprasad/delete-older-releases@v0.1.0
+        with:
+          keep_latest: 0
+          delete_tags: true
+
       # create release and upload image
       - name: Create release and upload image
-        uses: svenstaro/upload-release-action@1.0.1
+        uses: svenstaro/upload-release-action@2.2.0
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: pi-gen/deploy/HyperBian.zip
           asset_name: HyperBian.zip
           tag: HyperBian
+          release_name: HyperBian
+          body: "Raspberry Pi OS Lite lite with [Hyperion](https://github.com/hyperion-project/hyperion.ng) pre installed. Also called HyperBian."
           overwrite: true
