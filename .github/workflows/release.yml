@@ -16,7 +16,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y coreutils quilt parted qemu-user-static debootstrap zerofree zip dosfstools bsdtar libcap2-bin grep rsync xz-utils file git curl bc
+          sudo apt-get install -y coreutils quilt parted qemu-utils qemu-user-static debootstrap zerofree zip dosfstools libarchive-tools libcap2-bin grep rsync xz-utils file git curl bc
 
       # build image
       - name: Build HyperBian
@@ -47,5 +47,5 @@ jobs:
           asset_name: HyperBian.zip
           tag: HyperBian
           release_name: HyperBian
-          body: "Raspberry Pi OS Lite lite with [Hyperion](https://github.com/hyperion-project/hyperion.ng) pre installed. Also called HyperBian."
+          body: "Raspberry Pi OS Lite with [Hyperion](https://github.com/hyperion-project/hyperion.ng) pre installed. Also called HyperBian."
           overwrite: true
