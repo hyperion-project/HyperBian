@@ -31,5 +31,5 @@ echo '---> Installing Hyperion'
 apt-get -y install hyperion
 echo '---> Registering Hyperion'
 mv /etc/systemd/system/hyperiond@.service /etc/systemd/system/hyperion@.service
-systemctl -q enable hyperion"@pi".service
+systemctl -q enable hyperion"@root".service
 EOF
