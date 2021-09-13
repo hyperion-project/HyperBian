@@ -20,6 +20,10 @@ install -m 755 files/motd-hyperbian "${ROOTFS_DIR}"/etc/update-motd.d/10-hyperbi
 # Remove the "last login" information
 sed -i "s/^#PrintLastLog yes.*/PrintLastLog no/" ${ROOTFS_DIR}/etc/ssh/sshd_config
 
+# Hyperion privilege escalation script
+install -m 544 files/run-hyperion-root.sh "${ROOTFS_DIR}/home/pi/"
+chown pi:pi "${ROOTFS_DIR}/home/pi/run-hyperion-root.sh"
+
 on_chroot << EOF
 echo '---> Import the public GPG key from the APT server into HyperBian'
 wget -qO - https://apt.hyperion-project.org/hyperion.pub.key | apt-key add -
