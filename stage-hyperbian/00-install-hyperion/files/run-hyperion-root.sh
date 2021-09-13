@@ -6,6 +6,13 @@ BLUE='\033[0;34m'
 BOLD='\e[1m'
 NC='\033[0m'
 
+if [ "`id -u`" -ne 0 ]; then
+	printf "\n${RED}Not running as root!${NC}"
+	printf "\nRun this script as root. E.g., sudo $0"
+	printf "\n"
+	exit 99
+fi
+
 printf "\n${RED}"
 echo ' __          __     _____  _   _ _____ _   _  _____ '
 echo ' \ \        / /\   |  __ \| \ | |_   _| \ | |/ ____|'
@@ -30,16 +37,16 @@ case "$answer" in
 	YES )
 		printf "\n${BOLD}${RED}Restarting Hyperion as root${NC}"
 		printf "\n"
-		sudo systemctl disable --now hyperion@pi.service
-		sudo systemctl enable --now hyperion@root.service
-		sudo sed -i 's/pi.service/root.service/' /etc/update-motd.d/10-hyperbian
+		systemctl disable --now hyperion@pi.service
+		systemctl enable --now hyperion@root.service
+		sed -i 's/pi.service/root.service/' /etc/update-motd.d/10-hyperbian
 		;;
 	UNDO | undo )
 		printf "\n${BOLD}${GREEN}Dropping privileges for Hyperion service${NC}"
 		printf "\n"
-		sudo systemctl disable --now hyperion@root.service
-		sudo systemctl enable --now hyperion@pi.service
-		sudo sed -i 's/root.service/pi.service/' /etc/update-motd.d/10-hyperbian
+		systemctl disable --now hyperion@root.service
+		systemctl enable --now hyperion@pi.service
+		sed -i 's/root.service/pi.service/' /etc/update-motd.d/10-hyperbian
 		;;
 	* )
 		printf "\n${BOLD}Incorrect reply.${NC}"
