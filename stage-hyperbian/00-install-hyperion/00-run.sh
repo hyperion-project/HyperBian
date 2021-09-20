@@ -17,21 +17,14 @@ rm "${ROOTFS_DIR}"/etc/motd
 rm "${ROOTFS_DIR}"/etc/update-motd.d/10-uname
 install -m 755 files/motd-hyperbian "${ROOTFS_DIR}"/etc/update-motd.d/10-hyperbian
 
-# runHyperionAsRoot
-install -m 755 files/runHyperionAsRoot.sh "${ROOTFS_DIR}"/usr/local/bin/runHyperionAsRoot.sh
-
 # Remove the "last login" information
 sed -i "s/^#PrintLastLog yes.*/PrintLastLog no/" ${ROOTFS_DIR}/etc/ssh/sshd_config
 
 on_chroot << EOF
-echo '---> Create symlink to runHyperionAsRoot'
-ln -s /usr/local/bin/runHyperionAsRoot.sh /usr/local/bin/runHyperionAsRoot
 echo '---> Import the public GPG key from the APT server into HyperBian'
 wget -qO- https://apt.hyperion-project.org/hyperion.pub.key | gpg --dearmor -o /usr/share/keyrings/hyperion.pub.gpg
 echo '---> Add Hyperion to the APT sources'
-echo "deb [signed-by=/usr/share/keyrings/hyperion.pub.gpg] https://apt.hyperion-project.org/ stable main" > /etc/apt/sources.list.d/hyperion.list
-echo '---> Update the APT sources'
-apt-get update
-echo '---> Installing Hyperion'
-apt-get -y install hyperion
+echo "deb [signed-by=/usr/share/keyrings/hyperion.pub.gpg] https://apt.hyperion-project.org/ $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hyperion.list
+echo '---> Update the APT sources and installing Hyperion'
+apt-get update && apt-get -y install hyperion
 EOF
