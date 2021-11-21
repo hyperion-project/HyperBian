@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2.4.0
 
       # install dependencies
       - name: Install dependencies
@@ -31,7 +31,7 @@ jobs:
           sudo chown -fR $(stat -c "%U:%G" .) ./deploy
 
       - name: Delete previous HyperBian Release
-        uses: dev-drprasad/delete-older-releases@v0.1.0
+        uses: dev-drprasad/delete-older-releases@v0.2.0
         with:
           keep_latest: 0
           delete_tags: true
@@ -40,7 +40,7 @@ jobs:
 
       # create release and upload image
       - name: Create release and upload image
-        uses: svenstaro/upload-release-action@2.2.0
+        uses: svenstaro/upload-release-action@2.2.1
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: pi-gen/deploy/HyperBian.zip
