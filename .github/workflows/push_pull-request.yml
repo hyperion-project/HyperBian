@@ -27,3 +27,10 @@ jobs:
           sudo mv ./deploy/*.zip ./deploy/HyperBian.zip
           sudo chown -fR $(stat -c "%U:%G" .) ./deploy
 
+      # Upload artifacts
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: HyperBian.zip
+          path: pi-gen/deploy/HyperBian.zip
+          retention-days: 1
