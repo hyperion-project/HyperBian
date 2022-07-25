@@ -28,5 +28,5 @@ echo "deb [signed-by=/usr/share/keyrings/hyperion.pub.gpg] https://apt.hyperion-
 echo '---> Update the APT sources and installing Hyperion'
 apt-get update && apt-get -y install hyperion
 echo 'Registering Hyperion'
-systemctl -q enable hyperion"@pi".service
+systemctl -q enable hyperion"@hyperion".service
 EOF
