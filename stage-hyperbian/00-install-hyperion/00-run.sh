@@ -21,10 +21,10 @@ install -m 755 files/motd-hyperbian "${ROOTFS_DIR}"/etc/update-motd.d/10-hyperbi
 sed -i "s/^#PrintLastLog yes.*/PrintLastLog no/" ${ROOTFS_DIR}/etc/ssh/sshd_config
 
 on_chroot << EOF
-echo '---> Import the public GPG key from the APT server into HyperBian'
-wget -qO- https://apt.hyperion-project.org/hyperion.pub.key | gpg --dearmor -o /usr/share/keyrings/hyperion.pub.gpg
+echo '---> Import the public GPG key from the Repository Server into HyperBian'
+wget -qO- https://releases.hyperion-project.org/hyperion.pub.key | gpg --dearmor -o /usr/share/keyrings/hyperion.pub.gpg
 echo '---> Add Hyperion to the APT sources'
-echo "deb [signed-by=/usr/share/keyrings/hyperion.pub.gpg] https://apt.hyperion-project.org/ stable main" | sudo tee /etc/apt/sources.list.d/hyperion.list
+echo "deb [signed-by=/usr/share/keyrings/hyperion.pub.gpg] https://apt.releases.hyperion-project.org/ $(lsb_release -cs) main" > tee /etc/apt/sources.list.d/hyperion.list
 echo '---> Update the APT sources and installing Hyperion'
 apt-get update && apt-get -y install hyperion
 echo 'Registering Hyperion'
