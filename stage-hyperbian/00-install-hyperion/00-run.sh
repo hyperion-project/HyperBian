@@ -16,6 +16,7 @@ sed -i "s/^BUG_REPORT_URL=.*$/BUG_REPORT_URL=\"https:\/\/hyperion-project.org\/\
 rm "${ROOTFS_DIR}"/etc/motd
 rm "${ROOTFS_DIR}"/etc/update-motd.d/10-uname
 install -m 755 files/motd-hyperbian "${ROOTFS_DIR}"/etc/update-motd.d/10-hyperbian
+install -m 644 files/hyperion.sources ${ROOTFS_DIR}/usr/share/keyrings/
 
 # Remove the "last login" information
 sed -i "s/^#PrintLastLog yes.*/PrintLastLog no/" ${ROOTFS_DIR}/etc/ssh/sshd_config
@@ -23,8 +24,6 @@ sed -i "s/^#PrintLastLog yes.*/PrintLastLog no/" ${ROOTFS_DIR}/etc/ssh/sshd_conf
 on_chroot << EOF
 echo '---> Import the public GPG key from the Repository Server into HyperBian'
 wget -qO- https://releases.hyperion-project.org/hyperion.pub.key | gpg --dearmor -o /usr/share/keyrings/hyperion.pub.gpg
-echo '---> Add Hyperion to the APT sources'
-echo "deb [signed-by=/usr/share/keyrings/hyperion.pub.gpg] https://apt.releases.hyperion-project.org/ $(lsb_release -cs) main" > /etc/apt/sources.list.d/hyperion.list
 echo '---> Update the APT sources and installing Hyperion'
 apt-get update && apt-get -y install hyperion
 echo 'Registering Hyperion'
