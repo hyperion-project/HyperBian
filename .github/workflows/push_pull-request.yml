@@ -2,9 +2,14 @@ name: HyperBian CI Build
 on: [push, pull_request]
 
 jobs:
-  rpi-image:
-    name: "Build HyperBian image"
+  rpi-image-armhf:
+    name: "Build HyperBian image (${{ matrix.architecture }})"
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        architecture: [ 'armhf', 'arm64' ]
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -18,19 +23,23 @@ jobs:
       # build image
       - name: Build HyperBian
         run: |
-          git clone https://github.com/RPi-Distro/pi-gen.git
+          if [[ "${{ matrix.architecture }}" = 'arm64' ]]; then
+            git clone --branch arm64 https://github.com/RPi-Distro/pi-gen.git
+          else
+            git clone https://github.com/RPi-Distro/pi-gen.git
+          fi
           touch ./pi-gen/stage3/SKIP ./pi-gen/stage4/SKIP ./pi-gen/stage4/SKIP_IMAGES
           touch ./pi-gen/stage5/SKIP ./pi-gen/stage5/SKIP_IMAGES
           cp -R stage-hyperbian pi-gen/stage-hyperbian
           cp config pi-gen/config && cd pi-gen
           sudo ./build.sh
-          sudo mv ./deploy/*.zip ./deploy/HyperBian.zip
+          sudo mv ./deploy/*.zip ./deploy/HyperBian-${{ matrix.architecture }}.zip
           sudo chown -fR $(stat -c "%U:%G" .) ./deploy
 
       # Upload artifacts
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: HyperBian.zip
-          path: pi-gen/deploy/HyperBian.zip
+          name: HyperBian
+          path: pi-gen/deploy/HyperBian-${{ matrix.architecture }}.zip
           retention-days: 1

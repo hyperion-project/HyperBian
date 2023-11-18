@@ -5,3 +5,11 @@ URIs: https://apt.releases.hyperion-project.org
 Suites: stable
 Components: main
 Signed-By: /usr/share/keyrings/hyperion.pub.gpg
+
+Name: Hyperion (Nightly)
+Enabled: no
+Types: deb
+URIs: https://nightly.apt.releases.hyperion-project.org
+Suites: stable
+Components: main
+Signed-By: /usr/share/keyrings/hyperion.pub.gpg
