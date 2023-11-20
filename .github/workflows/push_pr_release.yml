@@ -1,0 +1,112 @@
+name: HyperBian CI/Release Build
+
+run-name: |
+  ${{ github.event_name == 'push' && format('🌱 Push build - {0}', github.event.head_commit.message) || '' }}
+  ${{ github.event_name == 'pull_request' && format('👷 PR #{0} build - {1}', github.event.pull_request.number, github.event.pull_request.title) || '' }}
+  ${{ github.event_name == 'repository_dispatch' && '🚀 Triggered HyperBian build' || '' }}
+
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+    branches:
+      - 'master'
+  repository_dispatch:
+    types: [hyperion_push]
+
+env:
+  PLATFORM: bookworm
+
+jobs:
+  image-builder:
+    name: "HyperBian-${{ env.PLATFORM }}-${{ matrix.pi-gen.architecture }}-lite"
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        pi-gen: [
+          { branch: master, architecture: armhf },
+          { branch: arm64,  architecture: arm64 }
+        ]
+
+    steps:
+      - name: ⬇ Checkout HyperBian
+        uses: actions/checkout@v4
+
+      - name: ⬇ Checkout pi-gen
+        uses: actions/checkout@v4
+        with:
+          repository: RPi-Distro/pi-gen
+          ref: ${{ matrix.pi-gen.branch }}
+
+      - name: 🔧 Prepare
+        run: sudo apt-get update && sudo apt-get install -y coreutils quilt parted qemu-utils qemu-user-static debootstrap zerofree zip dosfstools libarchive-tools libcap2-bin grep rsync xz-utils file git curl bc kmod kpartx
+
+      - name: 👷 Build
+        run: |
+          touch ./pi-gen/stage3/SKIP ./pi-gen/stage4/SKIP ./pi-gen/stage4/SKIP_IMAGES
+          touch ./pi-gen/stage5/SKIP ./pi-gen/stage5/SKIP_IMAGES
+          cp -R stage-hyperbian ./pi-gen/
+          touch ./pi-gen/stage-hyperbian/EXPORT_IMAGE
+          cp config ./pi-gen/ && cd pi-gen
+          echo "RELEASE='${{ env.PLATFORM }}'" >> "./config"
+          HYPERBIAN_IMAGE='HyperBian-${{ env.PLATFORM }}-${{ matrix.pi-gen.architecture }}-lite'
+          echo "IMG_FILENAME=$HYPERBIAN_IMAGE" >> $GITHUB_ENV
+          echo "ARCHIVE_FILENAME=$HYPERBIAN_IMAGE" >> $GITHUB_ENV
+          sudo ./build.sh
+
+      - name: 📦 Upload
+        if: ${{ github.event_name == 'repository_dispatch' || github.event_name == 'pull_request' }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ inputs.event_name == 'repository_dispatch' && 'artifact' || env.ARCHIVE_FILENAME }}
+          path: pi-gen/deploy/*.zip
+          retention-days: 1
+        
+
+#####################################
+###### Publish GitHub Releases ######
+#####################################
+
+  github_publish:
+    name: 🚀 Publish GitHub Releases
+    if: ${{ github.event_name == 'repository_dispatch' }}
+    needs: [ image-builder ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⬇ Checkout HyperBian
+        uses: actions/checkout@v4
+
+      - name: 🔧 Prepare
+        id: read_template
+        shell: bash
+        run: |
+          TEMPLATE=$(cat ./.github/workflows/template.md)
+          TEMPLATE="${TEMPLATE//'%'/'%25'}"
+          TEMPLATE="${TEMPLATE//$'\n'/'%0A'}"
+          TEMPLATE="${TEMPLATE//$'\r'/'%0D'}"
+          echo "::set-output name=RELEASE_BODY::$TEMPLATE"
+
+      - name: 💾 Artifact download
+        uses: actions/download-artifact@v3.0.2
+
+      - name: Delete previous HyperBian Release
+        uses: dev-drprasad/delete-older-releases@v0.3.2
+        with:
+          keep_latest: 0
+          delete_tags: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create release and upload image
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file_glob: true
+          file: artifact/*
+          tag: HyperBian
+          release_name: HyperBian
+          overwrite: true
+          body: |
+            ${{ steps.read_template.outputs.RELEASE_BODY }}
