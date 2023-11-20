@@ -20,7 +20,7 @@ env:
 
 jobs:
   image-builder:
-    name: "HyperBian-${{ env.PLATFORM }}-${{ matrix.pi-gen.architecture }}-lite"
+    name: "HyperBian (${{ matrix.pi-gen.architecture }})"
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -60,7 +60,7 @@ jobs:
         if: ${{ github.event_name == 'repository_dispatch' || github.event_name == 'pull_request' }}
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ inputs.event_name == 'repository_dispatch' && 'artifact' || env.ARCHIVE_FILENAME }}
+          name: ${{ github.event_name == 'repository_dispatch' && 'artifact' || env.ARCHIVE_FILENAME }}
           path: pi-gen/deploy/*.zip
           retention-days: 1
         
@@ -86,7 +86,7 @@ jobs:
           TEMPLATE="${TEMPLATE//'%'/'%25'}"
           TEMPLATE="${TEMPLATE//$'\n'/'%0A'}"
           TEMPLATE="${TEMPLATE//$'\r'/'%0D'}"
-          echo "::set-output name=RELEASE_BODY::$TEMPLATE"
+          echo "RELEASE_BODY=$TEMPLATE" >> "$GITHUB_OUTPUT"
 
       - name: 💾 Artifact download
         uses: actions/download-artifact@v3.0.2
