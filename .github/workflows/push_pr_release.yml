@@ -50,17 +50,17 @@ jobs:
           cp -R stage-hyperbian pi-gen/
           touch pi-gen/stage-hyperbian/EXPORT_IMAGE
           cp config pi-gen/ && cd pi-gen
+          echo "Suites: ${{ env.PLATFORM }}" >> "./stage-hyperbian/00-install-hyperion/files/hyperion.sources"
+          echo "Architectures: ${{ matrix.pi-gen.architecture }}" >> "./stage-hyperbian/00-install-hyperion/files/hyperion.sources"
           echo "RELEASE='${{ env.PLATFORM }}'" >> "./config"
-          HYPERBIAN_IMAGE='HyperBian-${{ env.PLATFORM }}-${{ matrix.pi-gen.architecture }}-lite'
-          echo "IMG_FILENAME=$HYPERBIAN_IMAGE" >> $GITHUB_ENV
-          echo "ARCHIVE_FILENAME=$HYPERBIAN_IMAGE" >> $GITHUB_ENV
-          sudo ./build.sh
+          echo "HYPERBIAN='HyperBian-${{ env.PLATFORM }}-${{ matrix.pi-gen.architecture }}'" >> $GITHUB_ENV
+          sudo IMG_FILENAME=${{ env.HYPERBIAN }} ARCHIVE_FILENAME=${{ env.HYPERBIAN }} ./build.sh
 
       - name: 📦 Upload
         if: ${{ github.event_name == 'repository_dispatch' || github.event_name == 'pull_request' }}
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ github.event_name == 'repository_dispatch' && 'artifact' || env.ARCHIVE_FILENAME }}
+          name: ${{ github.event_name == 'repository_dispatch' && 'artifact' || env.HYPERBIAN }}
           path: pi-gen/deploy/*.zip
           retention-days: 1
         
