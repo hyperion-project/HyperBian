@@ -42,7 +42,9 @@ jobs:
           path: pi-gen
 
       - name: 🔧 Prepare
-        run: sudo apt-get update && sudo apt-get install -y coreutils quilt parted qemu-utils qemu-user-static debootstrap zerofree zip dosfstools libarchive-tools libcap2-bin grep rsync xz-utils file git curl bc kmod kpartx
+        run: |
+          sudo apt-get update && sudo apt-get install -y coreutils quilt parted qemu-utils qemu-user-static debootstrap zerofree zip dosfstools libarchive-tools libcap2-bin grep rsync xz-utils file git curl bc kmod kpartx
+          echo "HYPERBIAN='HyperBian-${{ env.PLATFORM }}-${{ matrix.pi-gen.architecture }}'" >> $GITHUB_ENV
 
       - name: 👷 Build
         run: |
@@ -53,7 +55,6 @@ jobs:
           echo "Suites: ${{ env.PLATFORM }}" >> "./stage-hyperbian/00-install-hyperion/files/hyperion.sources"
           echo "Architectures: ${{ matrix.pi-gen.architecture }}" >> "./stage-hyperbian/00-install-hyperion/files/hyperion.sources"
           echo "RELEASE='${{ env.PLATFORM }}'" >> "./config"
-          echo "HYPERBIAN='HyperBian-${{ env.PLATFORM }}-${{ matrix.pi-gen.architecture }}'" >> $GITHUB_ENV
           sudo IMG_FILENAME=${{ env.HYPERBIAN }} ARCHIVE_FILENAME=${{ env.HYPERBIAN }} ./build.sh
 
       - name: 📦 Upload
