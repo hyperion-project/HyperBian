@@ -21,7 +21,7 @@ install -m 755 files/motd-hyperbian "${ROOTFS_DIR}"/etc/update-motd.d/10-hyperbi
 # Remove the "last login" information
 sed -i "s/^#PrintLastLog yes.*/PrintLastLog no/" ${ROOTFS_DIR}/etc/ssh/sshd_config
 
-# Add Hyperion DEB822 source file and update package information
+# Add Hyperion DEB822 sources file, download public gpg key and update package information
 echo '---> Integrate Hyperion Project Repository into HyperBian'
 install -m 644 files/hyperion.sources ${ROOTFS_DIR}/etc/apt/sources.list.d/
-on_chroot <<< "apt-get -y update"
+on_chroot <<< "curl --silent --show-error --location 'https://releases.hyperion-project.org/hyperion.pub.key' | gpg --dearmor -o /etc/apt/keyrings/hyperion.pub.gpg && apt-get update"
