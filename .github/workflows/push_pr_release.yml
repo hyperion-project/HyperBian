@@ -54,7 +54,8 @@ jobs:
           echo "Architectures: ${{ matrix.pi-gen.architecture }}" >> "./stage-hyperbian/00-install-hyperion/files/hyperion.sources"
           echo "RELEASE='${{ env.PLATFORM }}'" >> "./config"
           echo "HYPERBIAN='HyperBian-${{ env.PLATFORM }}-${{ matrix.pi-gen.architecture }}'" >> $GITHUB_ENV
-          sudo IMG_FILENAME=${{ env.HYPERBIAN }} ARCHIVE_FILENAME=${{ env.HYPERBIAN }} ./build.sh
+          cat ./stage-hyperbian/00-install-hyperion/files/hyperion.sources
+          # sudo IMG_FILENAME=${{ env.HYPERBIAN }} ARCHIVE_FILENAME=${{ env.HYPERBIAN }} ./build.sh
 
       - name: 📦 Upload
         if: ${{ github.event_name == 'repository_dispatch' || github.event_name == 'pull_request' }}
