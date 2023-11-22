@@ -1,7 +1,7 @@
-Raspberry Pi OS Lite with [Hyperion](https://github.com/hyperion-project/hyperion.ng) pre installed. Also called HyperBian.<br>
+Raspberry Pi OS Lite with [Hyperion](https://github.com/hyperion-project/hyperion.ng) pre installed. Also called HyperBian.
 We provide two different versions (arm64/armhf) according to your preferred hardware platform.
 
-**Recommendation:**<br>
+**Recommendation:**
 Use the arm64 image to benefit from a true 64 bit system.
 In case you run a Raspberry Pi 1, 2 or Zero v1, go for the armhf one.
 
