@@ -4,6 +4,7 @@ run-name: |
   ${{ github.event_name == 'push' && format('🌱 Push build - {0}', github.event.head_commit.message) || '' }}
   ${{ github.event_name == 'pull_request' && format('👷 PR #{0} build - {1}', github.event.pull_request.number, github.event.pull_request.title) || '' }}
   ${{ github.event_name == 'repository_dispatch' && '🚀 Triggered HyperBian build' || '' }}
+  ${{ github.event_name == 'workflow_dispatch' && '🚀 Manual triggered HyperBian build' || '' }}
 
 on:
   push:
@@ -12,8 +13,9 @@ on:
   pull_request:
     branches:
       - 'master'
+  workflow_dispatch:
   repository_dispatch:
-    types: [hyperion_push]
+    types: [ hyperion_push ]
 
 env:
   PLATFORM: bookworm
@@ -58,10 +60,10 @@ jobs:
           sudo IMG_FILENAME=${{ env.HYPERBIAN }} ARCHIVE_FILENAME=${{ env.HYPERBIAN }} ./build.sh
 
       - name: 📦 Upload
-        if: ${{ github.event_name == 'repository_dispatch' || github.event_name == 'pull_request' }}
+        if: ${{ github.event_name == 'repository_dispatch' || github.event_name == 'workflow_dispatch' || github.event_name == 'pull_request' }}
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ github.event_name == 'repository_dispatch' && 'artifact' || env.HYPERBIAN }}
+          name: ${{ env.HYPERBIAN }}
           path: pi-gen/deploy/*.zip
           retention-days: 1
         
@@ -72,7 +74,7 @@ jobs:
 
   github_publish:
     name: 🚀 Publish GitHub Releases
-    if: ${{ github.event_name == 'repository_dispatch' }}
+    if: ${{ github.event_name == 'repository_dispatch' || github.event_name == 'workflow_dispatch' }}
     needs: [ image-builder ]
     runs-on: ubuntu-latest
     steps:
@@ -91,6 +93,9 @@ jobs:
 
       - name: 💾 Artifact download
         uses: actions/download-artifact@v4.1.0
+        with:
+          pattern: HyperBian-*
+          path: all-artifacts
 
       - name: Delete previous HyperBian Release
         uses: dev-drprasad/delete-older-releases@v0.3.2
@@ -105,7 +110,7 @@ jobs:
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file_glob: true
-          file: artifact/*
+          file: all-artifacts/*
           tag: HyperBian
           release_name: HyperBian
           overwrite: true
