@@ -25,3 +25,7 @@ sed -i "s/^#PrintLastLog yes.*/PrintLastLog no/" ${ROOTFS_DIR}/etc/ssh/sshd_conf
 echo '---> Integrate Hyperion Project Repository into HyperBian'
 install -m 644 files/hyperion.sources ${ROOTFS_DIR}/etc/apt/sources.list.d/
 on_chroot <<< "curl --silent --show-error --location 'https://releases.hyperion-project.org/hyperion.pub.key' | gpg --dearmor -o /etc/apt/keyrings/hyperion.pub.gpg && apt-get update"
+
+#Temporary Patch
+echo '---> Patch updateHyperionUser.sh" with one from Hyperion Project Repository'
+curl --silent --show-error --location "https://raw.githubusercontent.com/hyperion-project/hyperion.ng/master/bin/scripts/updateHyperionUser.sh" -o "/usr/share/hyperion/scripts/updateHyperionUser.sh"
