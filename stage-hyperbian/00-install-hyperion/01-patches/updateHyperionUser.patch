@@ -1,7 +1,7 @@
-Index: /usr/share/hyperion/scripts/updateHyperionUser.sh
+Index: /rootfs/usr/share/hyperion/scripts/updateHyperionUser.sh
 ===================================================================
---- .orig/usr/share/hyperion/scripts/updateHyperionUser.sh
-+++ /usr/share/hyperion/scripts/updateHyperionUser.sh
+--- .orig/rootfs/usr/share/hyperion/scripts/updateHyperionUser.sh
++++ /rootfs/usr/share/hyperion/scripts/updateHyperionUser.sh
 @@ -70,7 +70,7 @@ if [[ ! -z ${CURRENT_SERVICE} ]]; then
  		exit 0;
  	fi
