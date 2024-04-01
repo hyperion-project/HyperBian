@@ -99,7 +99,7 @@ jobs:
           merge-multiple: true
 
       - name: Delete previous HyperBian Release
-        uses: dev-drprasad/delete-older-releases@v0.3.2
+        uses: dev-drprasad/delete-older-releases@v0.3.3
         with:
           keep_latest: 0
           delete_tags: true
