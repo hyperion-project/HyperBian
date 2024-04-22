@@ -11,4 +11,4 @@ Is a ready to use image for your Raspberry Pi. Based on the original Raspberry P
 3. Power on your Pi
 4. Visit with your Browser `http://IpOfYourPi:8090` for configuration
 
-More information in the [Hyperion Wiki](https://docs.hyperion-project.org/en/user/HyperBian.html)<br>
+More information in the [Hyperion Wiki](https://docs.hyperion-project.org/user/HyperBian.html)<br>
