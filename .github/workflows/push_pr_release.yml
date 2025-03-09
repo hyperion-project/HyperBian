@@ -23,7 +23,7 @@ env:
 jobs:
   image-builder:
     name: "HyperBian (${{ matrix.pi-gen.architecture }})"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04-arm
     strategy:
       fail-fast: false
       matrix:
