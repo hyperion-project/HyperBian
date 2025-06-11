@@ -81,39 +81,31 @@ jobs:
       - name: ⬇ Checkout HyperBian
         uses: actions/checkout@v4
 
-      - name: 🔧 Prepare
-        id: read_template
-        shell: bash
-        run: |
-          TEMPLATE=$(cat ./.github/workflows/template.md)
-          TEMPLATE="${TEMPLATE//'%'/'%25'}"
-          TEMPLATE="${TEMPLATE//$'\n'/'%0A'}"
-          TEMPLATE="${TEMPLATE//$'\r'/'%0D'}"
-          echo "RELEASE_BODY=$TEMPLATE" >> "$GITHUB_OUTPUT"
+      - name: 📑 Read HyperBian template
+        uses: markpatterson27/markdown-to-output@v1
+        id: hyperbian_template
+        with:
+          filepath: ./.github/workflows/template.md
 
       - name: 💾 Artifact download
         uses: actions/download-artifact@v4
         with:
           pattern: HyperBian-*
-          path: all-artifacts
           merge-multiple: true
 
-      - name: Delete previous HyperBian Release
-        uses: dev-drprasad/delete-older-releases@v0.3.4
-        with:
-          keep_latest: 0
-          delete_tags: true
+      - name: 📦 Create release and upload image
+        uses: andelf/nightly-release@main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Create release and upload image
-        uses: svenstaro/upload-release-action@v2
         with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file_glob: true
-          file: all-artifacts/*
-          tag: HyperBian
-          release_name: HyperBian
-          overwrite: true
-          body: |
-            ${{ steps.read_template.outputs.RELEASE_BODY }}
+          tag_name: HyperBian
+          name: 'HyperBian'
+          prerelease: false
+          body: ${{ steps.hyperbian_template.outputs.body }}
+          files: '*.zip'
+
+      - name: 🧹 Cleanup
+        uses: geekyeggo/delete-artifact@v5
+        with:
+          name: artifact-*
+          failOnError: false
