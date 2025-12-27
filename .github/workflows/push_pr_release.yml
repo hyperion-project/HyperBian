@@ -18,7 +18,7 @@ on:
     types: [ hyperion_push ]
 
 env:
-  PLATFORM: bookworm
+  PLATFORM: trixie
 
 jobs:
   image-builder:
@@ -28,8 +28,7 @@ jobs:
       fail-fast: false
       matrix:
         pi-gen: [
-          { branch: bookworm, architecture: armhf },
-          { branch: bookworm-arm64,  architecture: arm64 }
+          { branch: arm64,  architecture: arm64 }
         ]
 
     steps:
