@@ -30,7 +30,7 @@ hostname: hyperbian
 #timezone: Europe/Berlin
 
 # set the locale to a given locale
-default: en_US.UTF-8
+default: en_GB.UTF-8
 
 ## Sample for German locale
 #locale: de_DE.UTF-8
@@ -64,14 +64,6 @@ users:
   sudo: ["ALL=(ALL) NOPASSWD:ALL"]
   lock_passwd: false
   passwd: $1$5RPVAd$vJeLqLb5KjHn0aqw69Oxq1
-
-## Update apt database and upgrade packages on first boot
-#package_update: true
-#package_upgrade: true
-
-## Install additional packages on first boot
-#packages:
-#- avahi-daemon
 
 runcmd:
 - [ echo, "running the script for $(DEFAULT_USER)", ">", "/var/log/default_user.log" ]
