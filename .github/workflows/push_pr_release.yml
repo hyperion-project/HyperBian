@@ -56,7 +56,6 @@ jobs:
           cp config pi-gen/ && cd pi-gen
           echo "Suites: ${{ env.PLATFORM }}" >> "./stage-hyperbian/00-install-hyperion/files/hyperion.sources"
           echo "Architectures: ${{ matrix.pi-gen.architecture }}" >> "./stage-hyperbian/00-install-hyperion/files/hyperion.sources"
-          echo "RELEASE='${{ env.PLATFORM }}'" >> "./config"
           sudo IMG_FILENAME=${{ env.HYPERBIAN }} ARCHIVE_FILENAME=${{ env.HYPERBIAN }} ./build.sh
 
       - name: 📦 Upload
