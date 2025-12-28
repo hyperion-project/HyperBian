@@ -25,3 +25,8 @@ sed -i "s/^#PrintLastLog yes.*/PrintLastLog no/" ${ROOTFS_DIR}/etc/ssh/sshd_conf
 echo '---> Integrate Hyperion Project Repository into HyperBian'
 install -m 644 files/hyperion.sources ${ROOTFS_DIR}/etc/apt/sources.list.d/
 on_chroot <<< "curl --silent --show-error --location 'https://releases.hyperion-project.org/hyperion.pub.key' | gpg --dearmor -o /etc/apt/keyrings/hyperion.pub.gpg && apt-get update"
+
+# Install NoCloud user-data and meta-data files
+echo '---> Install NoCloud user-data and meta-data files'
+install -m 644 "files/user-data" "${ROOTFS_DIR}/boot/"
+install -m 644 "files/meta-data" "${ROOTFS_DIR}/boot/"

@@ -1,0 +1,79 @@
+#cloud-config
+
+# This is the user-data configuration file for cloud-init. By default this sets
+# up an initial user called "ubuntu" with password "ubuntu", which must be
+# changed at first login. However, many additional actions can be initiated on
+# first boot from this file. The cloud-init documentation has more details:
+#
+# https://cloudinit.readthedocs.io/
+#
+# Please note that the YAML format employed by this file is sensitive to
+# differences in whitespace; if you are editing this file in an editor (like
+# Notepad) which uses literal tabs, take care to only use spaces for
+# indentation. See the following link for more details:
+#
+# https://en.wikipedia.org/wiki/YAML
+#
+# Some additional examples are provided in comments below the default
+# configuration.
+
+## Set the system's hostname. Please note that, unless you have a local DNS
+## setup where the hostname is derived from DHCP requests (as with dnsmasq),
+## setting the hostname here will not make the machine reachable by this name.
+## You may also wish to install avahi-daemon (see the "packages:" key below)
+## to make your machine reachable by the .local domain
+hostname: hyperbian
+
+# timezone: set the timezone for this instance
+# the value of 'timezone' must exist in /usr/share/zoneinfo
+## Sample for Berlin timezone
+#timezone: Europe/Berlin
+
+# set the locale to a given locale
+default: en_US.UTF-8
+
+## Sample for German locale
+#locale: de_DE.UTF-8
+
+## Set up the keyboard layout. See localectl(1), in particular the various
+## list-x11-* sub-commands, to determine the available models, layouts,
+## variants, and options
+
+## Sample for German keyboard layout
+# keyboard:
+#   model: pc105
+#   layout: de
+#   variant:
+#   options: ctrl:nocaps
+
+# Controls password authentication with the SSH daemon; the default here can
+# prevent logging into SSH with a password. Changing this is a security risk
+# and you should at the very least ensure a different default password is
+# specified above
+#disable_root: false
+#ssh_pwauth: true
+
+system_info:
+  default_user:
+  name: hyperion
+
+users:
+- name: hyperion
+  gecos: Hyperion user
+  groups: users, dialout, sudo, video, audio
+  sudo: ["ALL=(ALL) NOPASSWD:ALL"]
+  lock_passwd: false
+  passwd: $1$5RPVAd$vJeLqLb5KjHn0aqw69Oxq1
+
+## Update apt database and upgrade packages on first boot
+#package_update: true
+#package_upgrade: true
+
+## Install additional packages on first boot
+#packages:
+#- avahi-daemon
+
+runcmd:
+- [ echo, "running the script for $(DEFAULT_USER)", ">", "/var/log/default_user.log" ]
+# Run the updateHyperionUser.sh script to set up the hyperion user
+- [ /usr/share/hyperion/scripts/updateHyperionUser.sh, "-u", "$(DEFAULT_USER)" ]

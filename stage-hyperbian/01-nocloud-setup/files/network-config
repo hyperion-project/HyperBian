@@ -1,0 +1,20 @@
+## Uncomment and edit the following section to configure your wireless network
+##
+## If you have additional needs refer to the cloud-init documentation and the netplan reference
+## for full details:
+##
+## https://netplan.io/reference
+## https://cloudinit.readthedocs.io/en/latest/topics/network-config.html
+## https://cloudinit.readthedocs.io/en/latest/topics/network-config-format-v2.html
+
+#network:
+#  version: 2
+  
+#   wifis:
+#     wlan0:
+#       dhcp4: true
+#       optional: true
+#       access-points:
+#         "YOUR_SSID_HERE":
+#           password: "YOUR_PASSWORD_HERE"
+#       regulatory-domain: CC # replace CC with your 2-letter country code
