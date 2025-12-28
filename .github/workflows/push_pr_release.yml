@@ -50,6 +50,7 @@ jobs:
       - name: 👷 Build
         run: |
           touch pi-gen/stage3/SKIP pi-gen/stage4/SKIP pi-gen/stage4/SKIP_IMAGES pi-gen/stage5/SKIP pi-gen/stage5/SKIP_IMAGES
+          cp -R stage2 pi-gen/
           cp -R stage-hyperbian pi-gen/
           touch pi-gen/stage-hyperbian/EXPORT_IMAGE
           cp config pi-gen/ && cd pi-gen
