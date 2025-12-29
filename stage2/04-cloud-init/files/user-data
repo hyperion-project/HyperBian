@@ -1,3 +1,4 @@
+## template: jinja
 #cloud-config
 
 # This is the user-data configuration file for cloud-init. By default this sets
@@ -14,58 +15,70 @@
 #
 # https://en.wikipedia.org/wiki/YAML
 #
-# Some additional examples are provided in comments below the default
-# configuration.
 
-## Set the system's hostname. Please note that, unless you have a local DNS
-## setup where the hostname is derived from DHCP requests (as with dnsmasq),
-## setting the hostname here will not make the machine reachable by this name.
-## You may also wish to install avahi-daemon (see the "packages:" key below)
-## to make your machine reachable by the .local domain
+##################################################################
+## Configure your initial HyperBian system to your needs below ###
+## Uncomment and edit the relevant sections as needed.         ###
+##################################################################
+
+# 1. Define the Hyperion user name (optional)
+{% set HYPERION_USER = "hyperion" %}
+
+# 2. Define, if ssh access should be enabled (optional)
+{% set ENABLE_SSH = false %}
+
+# 3. Set the system's hostname (optional)
 hostname: hyperbian
 
-# timezone: set the timezone for this instance
+# 4. Set the timezone for this instance (optional)
 # the value of 'timezone' must exist in /usr/share/zoneinfo
+
 ## Sample for Berlin timezone
 #timezone: Europe/Berlin
 
-# set the locale to a given locale
-default: en_GB.UTF-8
+# 5. Set the locale to a given locale; default: en_GB.UTF-8 (optional)
 
 ## Sample for German locale
 #locale: de_DE.UTF-8
 
-## Set up the keyboard layout. See localectl(1), in particular the various
-## list-x11-* sub-commands, to determine the available models, layouts,
-## variants, and options
+# 6. Set up the keyboard layout (optional)
+# See localectl(1), in particular the various list-x11-* sub-commands, 
+# to determine the available models, layouts, variants, and options
 
 ## Sample for German keyboard layout
-# keyboard:
-#   model: pc105
-#   layout: de
-#   variant:
-#   options: ctrl:nocaps
+#keyboard:
+#  layout: de 
 
-# Controls password authentication with the SSH daemon; the default here can
-# prevent logging into SSH with a password. Changing this is a security risk
-# and you should at the very least ensure a different default password is
-# specified above
-#disable_root: false
-#ssh_pwauth: true
+# 7. Enable the SPI interface (optional)
+rpi:
+  interfaces:
+    spi: true
 
-system_info:
-  default_user:
-  name: hyperion
+###############################
+### DO NOT CHANGE THE BELOW ###
+###############################
 
 users:
-- name: hyperion
+- name: {{ HYPERION_USER }}
   gecos: Hyperion user
-  groups: users, dialout, sudo, video, audio
+  groups: users, dialout, sudo, video, audio, gpio, spi, i2c
   sudo: ["ALL=(ALL) NOPASSWD:ALL"]
   lock_passwd: false
   passwd: $1$5RPVAd$vJeLqLb5KjHn0aqw69Oxq1
+  shell: /bin/bash
+ 
+ssh_pwauth: {{ ENABLE_SSH }}
 
 runcmd:
-- [ echo, "running the script for $(DEFAULT_USER)", ">", "/var/log/default_user.log" ]
-# Run the updateHyperionUser.sh script to set up the hyperion user
-- [ /usr/share/hyperion/scripts/updateHyperionUser.sh, "-u", "$(DEFAULT_USER)" ]
+  - |
+    echo "Running setup for Hyperion user: {{ HYPERION_USER }}"
+    /usr/share/hyperion/scripts/updateHyperionUser.sh -u "{{ HYPERION_USER }}"
+    
+{% if ENABLE_SSH %}
+  - systemctl unmask ssh
+  - systemctl enable ssh
+  - systemctl start ssh
+{% else %}
+  - echo "SSH is disabled in config"
+{% endif %}
+

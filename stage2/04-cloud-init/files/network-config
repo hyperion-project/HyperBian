@@ -1,20 +1,24 @@
-## Uncomment and edit the following section to configure your wireless network
+####################################################################################
+## Configure your initial HyperBian Wifi connectivity to your needs below.
+## Uncomment and edit the relevant sections as needed.
 ##
-## If you have additional needs refer to the cloud-init documentation and the netplan reference
-## for full details:
+## If you have additional needs refer to the cloud-init documentation 
+## and the netplan reference for full details:
 ##
 ## https://netplan.io/reference
 ## https://cloudinit.readthedocs.io/en/latest/topics/network-config.html
 ## https://cloudinit.readthedocs.io/en/latest/topics/network-config-format-v2.html
+####################################################################################
 
 #network:
-#  version: 2
-  
-#   wifis:
-#     wlan0:
-#       dhcp4: true
-#       optional: true
-#       access-points:
-#         "YOUR_SSID_HERE":
-#           password: "YOUR_PASSWORD_HERE"
-#       regulatory-domain: CC # replace CC with your 2-letter country code
+#  version: 2 
+#  wifis:
+#    wlan0:
+#      dhcp4: true
+#      optional: true
+#      access-points:
+## Replace the elements below with your Wifi SSID and Password
+#        "YOUR_SSID_HERE":
+#          password: "YOUR_PASSWORD_HERE"
+## Replace CC with your 2-letter country code
+#      regulatory-domain: DE
