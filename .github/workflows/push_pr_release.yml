@@ -61,7 +61,7 @@ jobs:
 
       - name: 📦 Upload
         if: ${{ github.event_name == 'repository_dispatch' || github.event_name == 'workflow_dispatch' || github.event_name == 'pull_request' }}
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: ${{ env.HYPERBIAN }}
           path: pi-gen/deploy/*.zip
