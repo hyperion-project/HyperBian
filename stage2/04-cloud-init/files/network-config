@@ -10,6 +10,7 @@
 ## https://cloudinit.readthedocs.io/en/latest/topics/network-config-format-v2.html
 ####################################################################################
 
+## Uncomment the below to enable the configuration
 #network:
 #  version: 2 
 #  wifis:
@@ -18,7 +19,7 @@
 #      optional: true
 #      access-points:
 ## Replace the elements below with your Wifi SSID and Password
-#        "YOUR_SSID_HERE":
-#          password: "YOUR_PASSWORD_HERE"
-## Replace CC with your 2-letter country code
-#      regulatory-domain: DE
+#        "YOUR_SSID":
+#          password: "YOUR_PASSWORD"
+## Replace YOUR_COUNTRY_CODE with your 2-letter country code
+#      regulatory-domain: YOUR_COUNTRY_CODE

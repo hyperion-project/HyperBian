@@ -32,11 +32,13 @@ hostname: hyperbian
 
 # 4. Set the timezone for this instance (optional)
 # the value of 'timezone' must exist in /usr/share/zoneinfo
+# Run: timedatectl list-timezones
 
 ## Sample for Berlin timezone
 #timezone: Europe/Berlin
 
 # 5. Set the locale to a given locale; default: en_GB.UTF-8 (optional)
+# Run: locale -a
 
 ## Sample for German locale
 #locale: de_DE.UTF-8
@@ -44,10 +46,11 @@ hostname: hyperbian
 # 6. Set up the keyboard layout (optional)
 # See localectl(1), in particular the various list-x11-* sub-commands, 
 # to determine the available models, layouts, variants, and options
+# Run: localectl list-x11-keymap-layouts
 
 ## Sample for German keyboard layout
 #keyboard:
-#  layout: de 
+#  layout: de
 
 # 7. Enable the SPI interface (optional)
 rpi:
@@ -81,4 +84,3 @@ runcmd:
 {% else %}
   - echo "SSH is disabled in config"
 {% endif %}
-
