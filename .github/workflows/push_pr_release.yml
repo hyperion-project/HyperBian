@@ -18,7 +18,7 @@ on:
     types: [ hyperion_push ]
 
 env:
-  PLATFORM: bookworm
+  PLATFORM: trixie
 
 jobs:
   image-builder:
@@ -28,8 +28,8 @@ jobs:
       fail-fast: false
       matrix:
         pi-gen: [
-          { branch: bookworm, architecture: armhf },
-          { branch: bookworm-arm64,  architecture: arm64 }
+          { branch: master, architecture: armhf },
+          { branch: arm64,  architecture: arm64 }
         ]
 
     steps:
@@ -51,12 +51,13 @@ jobs:
       - name: 👷 Build
         run: |
           touch pi-gen/stage3/SKIP pi-gen/stage4/SKIP pi-gen/stage4/SKIP_IMAGES pi-gen/stage5/SKIP pi-gen/stage5/SKIP_IMAGES
+          cp -R stage2 pi-gen/
           cp -R stage-hyperbian pi-gen/
           touch pi-gen/stage-hyperbian/EXPORT_IMAGE
           cp config pi-gen/ && cd pi-gen
           echo "Suites: ${{ env.PLATFORM }}" >> "./stage-hyperbian/00-install-hyperion/files/hyperion.sources"
           echo "Architectures: ${{ matrix.pi-gen.architecture }}" >> "./stage-hyperbian/00-install-hyperion/files/hyperion.sources"
-          echo "RELEASE='${{ env.PLATFORM }}'" >> "./config"
+          echo -e "\nRELEASE='${{ env.PLATFORM }}'" >> "./config"
           sudo IMG_FILENAME=${{ env.HYPERBIAN }} ARCHIVE_FILENAME=${{ env.HYPERBIAN }} ./build.sh
 
       - name: 📦 Upload
