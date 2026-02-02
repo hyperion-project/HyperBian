@@ -15,7 +15,7 @@ printf "|  __  |   \   /   |  ___/  |  __|   |  _  /  |  _ <  | |   / /\ \   | .
 printf "| |  | |    | |    | |      | |____  | | \ \  | |_) | | |  / ____ \  | |\  |\n"
 printf "|_|  |_|    |_|    |_|      |______| |_|  \_\ |____/  |_| /_/    \_\ |_| \_|\n"
 
-printf "\nTo configure Hyperion browse to ${BLUE}http://${IP}:8090${NC} from another device on your network."
+printf "\nTo configure Hyperion browse to ${BOLD}http://${IP}:8090${NC} from another device on your network."
 printf "\nAll Hyperion configuration can be completed via the Hyperion Web UI.\n\n"
 
 systemctl is-active hyperion@*.service >/dev/null 2>&1 && printf "Hyperion status: ${GREEN}⬤  Running${NC}\n" || printf "Hyperion status: ${RED}⬤  Stopped${NC}\n"
