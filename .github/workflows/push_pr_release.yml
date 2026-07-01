@@ -34,10 +34,10 @@ jobs:
 
     steps:
       - name: ⬇ Checkout HyperBian
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: ⬇ Checkout pi-gen
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: RPi-Distro/pi-gen
           ref: ${{ matrix.pi-gen.branch }}
@@ -80,7 +80,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: ⬇ Checkout HyperBian
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: 📑 Read HyperBian template
         uses: markpatterson27/markdown-to-output@v1
